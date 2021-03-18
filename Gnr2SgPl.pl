@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 # You should probably use the related bash script to call this script, but you can use: 
-my $USAGE = "Usage: $0 [--configfile NumberExamples.ini] [--section NumberExamples] [--debug] [--checkini]";
+my $USAGE = "Usage: $0 [--configfile Gnr2SgPl.ini] [--section Gnr2SgPl] [--debug] [--checkini]";
 
 use 5.016;
 use strict;
@@ -18,24 +18,33 @@ my $scriptname = fileparse($0, qr/\.[^.]*/); # script name without the .pl
 use Getopt::Long;
 GetOptions (
 	'configfile:s'   => \(my $configfile = "$scriptname.ini"), # ini filename
-	'section:s'   => \(my $inisection = "NumberExamples"), # section of ini file to use
+	'section:s'   => \(my $inisection = "Gnr2SgPl"), # section of ini file to use
 	'debug'       => \(my $debug = 0),
 	'checkini'       => \(my $checkini = 0),
 	) or die $USAGE;
 
 use Config::Tiny;
- # ; NumberExamples.ini file looks like:
- # [NumberExamples]
+ # ; Gnr2SgPl.ini file looks like:
+ # [Gnr2SgPl]
  # FwdataIn=FwProject-before.fwdata
  # FwdataOut=FwProject.fwdata
- # NumberFieldname="Example Number"
+ # SgPlFieldname=Valency
+ # PluralRelationName=Plural
+ # SingularRelationName=Singular
+ # LiftFile=lift.lift
+ # LogFile=Gnr2SgPl.log
 
 my $config = Config::Tiny->read($configfile, 'crlf');
 
 die "Couldn't find the INI file:$configfile\nQuitting" if !$config;
 my $infilename = $config->{$inisection}->{FwdataIn};
 my $outfilename = $config->{$inisection}->{FwdataOut};
-my $numberfieldname = $config->{$inisection}->{NumberFieldname};
+my $liftfilename = $config->{$inisection}->{LiftFile};
+my $logfilename = $config->{$inisection}->{LogFile};
+my $sgplfieldname = $config->{$inisection}->{SgPlFieldname};
+my $plrelname = $config->{$inisection}->{PluralRelationName};
+my $sgrelname = $config->{$inisection}->{SingularRelationName};
+my $genrelname = $config->{$inisection}->{GeneralRelationName};
 
 my $lockfile = $infilename . '.lock' ;
 die "A lockfile exists: $lockfile\
@@ -45,8 +54,7 @@ I'm quitting" if -f $lockfile ;
 
 die "config:". Dumper($config) if $checkini;
 
-say "Processing fwdata file: $infilename";
-
+say "Loading fwdata file: $infilename";
 my $fwdatatree = XML::LibXML->load_xml(location => $infilename);
 
 my %rthash;
@@ -55,10 +63,20 @@ foreach my $rt ($fwdatatree->findnodes(q#//rt#)) {
 	$rthash{$guid} = $rt;
 	}
 
-my @ExampleNumNodes = $fwdatatree->findnodes(q#//Custom[@name='# . $numberfieldname . q#']#);
+say "Loading LIFT file: $liftfilename";
+my $lifttree = XML::LibXML->load_xml(location => $liftfilename);
 
-die "No Custom $numberfieldname fields" unless @ExampleNumNodes;
+my %entryhash;
+foreach my $entry ($lifttree->findnodes(q#//entry#)) {
+	my $id = $entry->getAttribute('id');
+	$entryhash{$id} = $entry;
+	}
 
+die "entry:". Dumper(%entryhash) ;
+
+my @ExampleNumNodes = $fwdatatree->findnodes(q#//Custom[@name='# . $sgplfieldname . q#']#);
+
+# processing changes quite a bit from here on -- except for subroutines
 my $examplecount = 0;
 foreach my $ExampleNumNode (@ExampleNumNodes) {
 	my ($LexExampleSentencert) = $ExampleNumNode->findnodes(q#./ancestor::rt#);
