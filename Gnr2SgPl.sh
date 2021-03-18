@@ -23,14 +23,14 @@ barefname=${fwdatafile%.fwdata}
 # echo "barefname $barefname fwdatafile $fwdatafile"
 mv "$fwdatafile" "$barefname-before.fwdata"
 
-mv NumberExamples.ini NumberExamples.bak
-perl -pE "s/FwdataIn.*/FwdataIn=$barefname-before.fwdata/; s/FwdataOut.*/FwdataOut=$fwdatafile/"  NumberExamples.bak > NumberExamples.ini
-./NumberExamples.pl
+mv Gnr2SgPl.ini Gnr2SgPl.bak
+perl -pE "s/FwdataIn.*/FwdataIn=$barefname-before.fwdata/; s/FwdataOut.*/FwdataOut=$fwdatafile/" Gnr2SgPl.bak > Gnr2SgPl.ini
+./Gnr2SgPl.pl
 zip "$backupfile" "$fwdatafile"  # 2>/dev/null
 echo
 rm $fwdatafile $barefname-before.fwdata
 echo "Work files \"$fwdatafile\" & \"$barefname-before.fwdata\" have been deleted"
-mv NumberExamples.bak NumberExamples.ini
+mv Gnr2SgPl.bak Gnr2SgPl.ini
 echo
-echo "The file \"$fwdatafile\" inside \"$backupfile\" has had the Examples numbered."
+echo "The file \"$fwdatafile\" inside \"$backupfile\" has had some General crossreferences changed to Singular/Plural See the log file."
 
