@@ -54,7 +54,7 @@ I'm quitting" if -f $lockfile ;
 
 die "config:". Dumper($config) if $checkini;
 
-say "Loading fwdata file: $infilename";
+say STDERR "Loading fwdata file: $infilename";
 my $fwdatatree = XML::LibXML->load_xml(location => $infilename);
 
 my %rthash;
@@ -63,7 +63,7 @@ foreach my $rt ($fwdatatree->findnodes(q#//rt#)) {
 	$rthash{$guid} = $rt;
 	}
 
-say "Loading LIFT file: $liftfilename";
+say STDERR "Loading LIFT file: $liftfilename";
 my $lifttree = XML::LibXML->load_xml(location => $liftfilename);
 
 my %entryhash;
