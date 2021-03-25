@@ -82,27 +82,9 @@ foreach my $entry ($lifttree->findnodes(q#//entry#)) {
 	}
 
 die "entry:". Dumper(%entryhash) ;
-
-my @ExampleNumNodes = $fwdatatree->findnodes(q#//Custom[@name='# . $sgplfieldname . q#']#);
-
-# processing changes quite a bit from here on -- except for subroutines
-my $examplecount = 0;
-foreach my $ExampleNumNode (@ExampleNumNodes) {
-	my ($LexExampleSentencert) = $ExampleNumNode->findnodes(q#./ancestor::rt#);
-	my $LexExampleSentenceguid = $LexExampleSentencert->getAttribute('guid');
-	say STDERR 'Found ', rtheader($LexExampleSentencert) if $debug;
-	say STDERR "guid  $LexExampleSentenceguid" if $debug;
-	my $LexSensert = traverseuptoclass($LexExampleSentencert, 'LexSense');
-	say STDERR 'Found sense', rtheader($LexSensert) if $debug;
-	my @prevsentences = $LexSensert->findnodes( q#./Examples/objsur[@guid="# . $LexExampleSentenceguid . q#"]/preceding-sibling::*# );
-	# index-of in Xpath2 is nicer 
-	my $index = scalar ( @prevsentences ) +1;
-	say "index $index" if $debug;
-	$ExampleNumNode->setAttribute('val', $index);
-	$examplecount++;
 	}
 
-say STDERR "Renumbered $examplecount examples";
+=pod
 my $xmlstring = $fwdatatree->toString;
 # Some miscellaneous Tidying differences
 $xmlstring =~ s#><#>\n<#g;
