@@ -52,6 +52,9 @@ Don't run $0 when FW is running.\
 Run it on a copy of the project, not the original!\
 I'm quitting" if -f $lockfile ;
 
+
+open(LOGFILE, '>:encoding(UTF-8)', "$logfilename");
+
 die "config:". Dumper($config) if $checkini;
 
 say STDERR "Loading fwdata file: $infilename";
