@@ -68,8 +68,8 @@ my $lifttree = XML::LibXML->load_xml(location => $liftfilename);
 
 my %entryhash;
 foreach my $entry ($lifttree->findnodes(q#//entry#)) {
-	my $id = $entry->getAttribute('id');
-	$entryhash{$id} = $entry;
+	my $entryguid = $entry->getAttribute('guid');
+	$entryhash{$entryguid} = $entry;
 	}
 
 die "entry:". Dumper(%entryhash) ;
