@@ -81,10 +81,42 @@ foreach my $entry ($lifttree->findnodes(q#//entry#)) {
 	$entryhash{$entryguid} = $entry;
 	}
 
-die "entry:". Dumper(%entryhash) ;
+# say LOGFILE "General LexReftype:";
+# say LOGFILE $genrelrt;
+my $mbrcnt=0;
+foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
+	my $mbrguid = $mbr->getAttribute('guid');
+	my $lxrefrt = $rthash{$mbrguid};
+	# say $lxrefrt;
+	my @targets = $lxrefrt->findnodes('./Targets/objsur');
+	next if (scalar ( @targets ) != 2); #only pairs not collections
+	# Both targets must be in LIFT file
+	my $target1guid = $targets[0]->getAttribute('guid');
+	next if ! exists $entryhash{$target1guid};
+	my $entry1 = $entryhash{$target1guid};
+	my $target2guid = $targets[1]->getAttribute('guid');
+	next if ! exists $entryhash{$target2guid};
+	my $entry2 = $entryhash{$target2guid};
+
+	say LOGFILE "mbr:", $mbr;
+	say LOGFILE "	entry1 id:", $entry1->findnodes('./@id');
+	say LOGFILE "	entry2 id:", $entry2->findnodes('./@id');
+
+	$mbrcnt++;
+	die if $mbrcnt > 3;
 	}
 
 =pod
+say "Singular LexReftype:";
+say $sgrelrt;
+say "Plural LexReftype:";
+say $plrelrt;
+
+=cut
+
+die;
+die "entries:". Dumper(%entryhash) ;
+
 my $xmlstring = $fwdatatree->toString;
 # Some miscellaneous Tidying differences
 $xmlstring =~ s#><#>\n<#g;
