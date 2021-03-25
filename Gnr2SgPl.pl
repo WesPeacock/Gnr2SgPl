@@ -66,6 +66,12 @@ foreach my $rt ($fwdatatree->findnodes(q#//rt#)) {
 	$rthash{$guid} = $rt;
 	}
 
+my ($genrelrt) = $fwdatatree->findnodes(q#//AUni[text()='# . $genrelname . q#']/ancestor::rt[@class='LexRefType']#);
+
+my ($sgrelrt) = $fwdatatree->findnodes(q#//AUni[text()='# . $sgrelname . q#']/ancestor::rt[@class='LexRefType']#);
+
+my ($plrelrt) = $fwdatatree->findnodes(q#//AUni[text()='# . $plrelname . q#']/ancestor::rt[@class='LexRefType']#);
+
 say STDERR "Loading LIFT file: $liftfilename";
 my $lifttree = XML::LibXML->load_xml(location => $liftfilename);
 
