@@ -84,7 +84,9 @@ foreach my $entry ($lifttree->findnodes(q#//entry#)) {
 # say LOGFILE "General LexReftype:";
 # say LOGFILE $genrelrt;
 my $mbrcnt=0;
+my $mbrtotal=0;
 foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
+	$mbrtotal++;
 	my $mbrguid = $mbr->getAttribute('guid');
 	my $lxrefrt = $rthash{$mbrguid};
 	# say $lxrefrt;
@@ -103,9 +105,9 @@ foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
 	say LOGFILE "	entry2 id:", $entry2->findnodes('./@id');
 
 	$mbrcnt++;
-	die if $mbrcnt > 3;
+	last if $mbrcnt > 3;
 	}
-
+say STDERR "Found $mbrcnt of $mbrtotal";
 =pod
 say "Singular LexReftype:";
 say $sgrelrt;
