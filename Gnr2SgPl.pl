@@ -67,6 +67,7 @@ foreach my $rt ($fwdatatree->findnodes(q#//rt#)) {
 	}
 
 my ($genrelrt) = $fwdatatree->findnodes(q#//AUni[text()='# . $genrelname . q#']/ancestor::rt[@class='LexRefType']#);
+say LOGFILE "General LexReftype:",  $genrelrt if $debug;
 
 my ($sgrelrt) = $fwdatatree->findnodes(q#//AUni[text()='# . $sgrelname . q#']/ancestor::rt[@class='LexRefType']#);
 
@@ -81,8 +82,6 @@ foreach my $entry ($lifttree->findnodes(q#//entry#)) {
 	$entryhash{$entryguid} = $entry;
 	}
 
-# say LOGFILE "General LexReftype:";
-# say LOGFILE $genrelrt;
 my $mbrcnt=0;
 my $mbrtotal=0;
 foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
