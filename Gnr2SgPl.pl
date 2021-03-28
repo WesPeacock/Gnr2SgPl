@@ -117,6 +117,12 @@ foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
 	next if ! exists $entryhash{$target2guid};
 	my $entry2 = $entryhash{$target2guid};
 
+# next if entries have either singular or plural crossrefs already
+	next if $entry1->findnodes(q#./relation[@type='# . $sgrelname . q#']#);
+	next if $entry1->findnodes(q#./relation[@type='# . $plrelname . q#']#);
+	next if $entry2->findnodes(q#./relation[@type='# . $sgrelname . q#']#);
+	next if $entry2->findnodes(q#./relation[@type='# . $plrelname . q#']#);
+
 # If both only have a single Gnr relation and if one is Singular and other is Plural
 	# as a subroutine input mbr node
 	# Delete the Mbr node in the General list
