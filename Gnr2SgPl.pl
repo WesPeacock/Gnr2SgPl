@@ -90,6 +90,14 @@ my %entryhash;
 foreach my $entry ($lifttree->findnodes(q#//entry#)) {
 	my $entryguid = $entry->getAttribute('guid');
 	$entryhash{$entryguid} = $entry;
+	if ($debug) {
+		if ($entry->findnodes(q#./relation[@type='# . $sgrelname . q#']#)) {
+			say $entry->findnodes(q#./relation[@type='# . $sgrelname . q#']#);
+			}
+		if ($entry->findnodes(q#./relation[@type='# . $plrelname . q#']#)) {
+			say $entry->findnodes(q#./relation[@type='# . $plrelname . q#']#);
+			}
+		}
 	}
 
 my $mbrcnt=0;
