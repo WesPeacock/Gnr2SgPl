@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 # You should probably use the related bash script to call this script, but you can use: 
-my $USAGE = "Usage: $0 [--configfile Gnr2SgPl.ini] [--section Gnr2SgPl] [--debug] [--checkini]";
+my $USAGE = "Usage: $0 [--configfile Gnr2SgPl.ini] [--section Gnr2SgPl] [--debug] [--checkini] [--gnrdmp] [--sgpldmp]";
 
 use 5.016;
 use strict;
@@ -20,6 +20,8 @@ GetOptions (
 	'configfile:s'   => \(my $configfile = "$scriptname.ini"), # ini filename
 	'section:s'   => \(my $inisection = "Gnr2SgPl"), # section of ini file to use
 	'debug'       => \(my $debug = 0),
+	'gnrdmp'       => \(my $gnrdmp = 0),
+	'sgpldmp'       => \(my $sgpldmp = 0),
 	'checkini'       => \(my $checkini = 0),
 	) or die $USAGE;
 
@@ -68,11 +70,18 @@ foreach my $rt ($fwdatatree->findnodes(q#//rt#)) {
 
 # Bug: doesn't handle cases where LexRefType Names don't occur as complete <AUni> fields
 my ($genrelrt) = $fwdatatree->findnodes(q#//AUni[text()='# . $genrelname . q#']/ancestor::rt[@class='LexRefType']#);
-say LOGFILE "General LexReftype:",  $genrelrt if $debug;
+my $sgn = $genrelrt->serialize();
+say STDERR $sgn  if $gnrdmp;
 
 my ($sgrelrt) = $fwdatatree->findnodes(q#//AUni[text()='# . $sgrelname . q#']/ancestor::rt[@class='LexRefType']#);
+my $ssg = $sgrelrt->serialize();
+say LOGFILE "Singular LexReftype:"  if $sgpldmp;
+say LOGFILE $ssg  if $sgpldmp;
 
 my ($plrelrt) = $fwdatatree->findnodes(q#//AUni[text()='# . $plrelname . q#']/ancestor::rt[@class='LexRefType']#);
+my $spl = $plrelrt->serialize();
+say LOGFILE "Plural LexReftype:"  if $sgpldmp;
+say LOGFILE $spl  if $sgpldmp;
 
 say STDERR "Loading LIFT file: $liftfilename";
 my $lifttree = XML::LibXML->load_xml(location => $liftfilename);
@@ -108,13 +117,6 @@ foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
 	last if $mbrcnt > 3;
 	}
 say STDERR "Found $mbrcnt of $mbrtotal";
-=pod
-say "Singular LexReftype:";
-say $sgrelrt;
-say "Plural LexReftype:";
-say $plrelrt;
-
-=cut
 
 die;
 die "entries:". Dumper(%entryhash) ;
