@@ -110,8 +110,8 @@ foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
 	my $entry2 = $entryhash{$target2guid};
 
 	say LOGFILE "mbr:", $mbr;
-	say LOGFILE "	entry1 id:", $entry1->findnodes('./@id');
-	say LOGFILE "	entry2 id:", $entry2->findnodes('./@id');
+	say LOGFILE "	entry1 id:", $entry1->getAttribute('id');
+	say LOGFILE "	entry2 id:", $entry2->getAttribute('id');
 
 	$mbrcnt++;
 	last if $mbrcnt > 3;
