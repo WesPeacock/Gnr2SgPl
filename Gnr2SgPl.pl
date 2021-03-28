@@ -66,6 +66,7 @@ foreach my $rt ($fwdatatree->findnodes(q#//rt#)) {
 	$rthash{$guid} = $rt;
 	}
 
+# Bug: doesn't handle cases where LexRefType Names don't occur as complete <AUni> fields
 my ($genrelrt) = $fwdatatree->findnodes(q#//AUni[text()='# . $genrelname . q#']/ancestor::rt[@class='LexRefType']#);
 say LOGFILE "General LexReftype:",  $genrelrt if $debug;
 
