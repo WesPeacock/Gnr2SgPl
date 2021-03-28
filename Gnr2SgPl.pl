@@ -109,6 +109,17 @@ foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
 	next if ! exists $entryhash{$target2guid};
 	my $entry2 = $entryhash{$target2guid};
 
+# If both only have a single Gnr relation and if one is Singular and other is Plural
+	# as a subroutine input mbr node
+	# Delete the Mbr node in the General list
+	#    -but don't mess up the foreach command
+	#    -maybe add to a list of mbrs to be deleted
+	# create a new rt as singular ref
+	# change the old Gnr ref to plural
+	# add the singular & plural rts to their respective mbr lists.
+	# Log the change as an Update
+	# next
+
 	say LOGFILE "mbr:", $mbr;
 	say LOGFILE "	entry1 id:", $entry1->getAttribute('id');
 	say LOGFILE "	entry2 id:", $entry2->getAttribute('id');
@@ -117,7 +128,7 @@ foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
 	last if $mbrcnt > 3;
 	}
 say STDERR "Found $mbrcnt of $mbrtotal";
-
+# maybe do mbr deletes from Gnr here.
 die;
 die "entries:". Dumper(%entryhash) ;
 
