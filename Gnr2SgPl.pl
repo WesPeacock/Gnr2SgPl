@@ -101,6 +101,13 @@ foreach my $entry ($lifttree->findnodes(q#//entry#)) {
 	if ($debug) {
 		if ($entry->findnodes(q#./relation[@type='# . $sgrelname . q#']#)) {
 			say $entry->findnodes(q#./relation[@type='# . $sgrelname . q#']#);
+=pod
+			my ($s) = $entry->findnodes(q#./field[@type='Valency']/form/text/text()#);
+			say "lift:", lc $s;
+			my $temprt =  $rthash{$entry->getAttribute('guid')};
+			($s) = $temprt->findnodes(q#./Custom[@name='Valency']/AStr/Run/text()#);
+			say "fwdata:", lc $s;
+=cut
 			}
 		if ($entry->findnodes(q#./relation[@type='# . $plrelname . q#']#)) {
 			say $entry->findnodes(q#./relation[@type='# . $plrelname . q#']#);
