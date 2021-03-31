@@ -1,6 +1,10 @@
 #!/usr/bin/perl
 # You should probably use the related bash script to call this script, but you can use: 
 my $USAGE = "Usage: $0 [--configfile Gnr2SgPl.ini] [--section Gnr2SgPl] [--debug] [--checkini] [--gnrdmp] [--sgpldmp]";
+# debug -- dump debugging information
+# checkini -- quit after proscessing configfile
+# gnrdmp -- dump master General Relation
+# sgpldmp -- dump master Singular/Plural Relation
 
 use 5.016;
 use strict;
@@ -123,7 +127,21 @@ foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
 	next if $entry2->findnodes(q#./relation[@type='# . $sgrelname . q#']#);
 	next if $entry2->findnodes(q#./relation[@type='# . $plrelname . q#']#);
 
-# If both only have a single Gnr relation and if one is Singular and other is Plural
+# next if both don't have a just single Gnr relation
+	my @rels1 = $entry1->findnodes(q#./relation[@type='# . $genrelname . q#']#);
+	next if (scalar @rels1) != 1;
+	my ($valen1) = $entry1->findnodes(q#./field[@type='Valency']/form/text/text()#);
+	$valen1 = lc $valen1;
+
+	my @rels2 = $entry2->findnodes(q#./relation[@type='# . $genrelname . q#']#);
+	next if (scalar @rels2) != 1;
+	my ($valen2) = $entry2->findnodes(q#./field[@type='Valency']/form/text/text()#);
+	$valen2 = lc $valen2;
+
+	#	and if one is Singular and other is Plural
+	next if ! (("$valen1$valen2" eq "$sgabbrev$plabbrev"))
+		|| (("$valen1$valen2" eq "$plabbrev$sgabbrev"));
+		
 	# as a subroutine input mbr node
 	# Delete the Mbr node in the General list
 	#    -but don't mess up the foreach command
@@ -134,12 +152,18 @@ foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
 	# Log the change as an Update
 	# next
 
-	say LOGFILE "mbr:", $mbr;
-	say LOGFILE "	entry1 id:", $entry1->getAttribute('id');
-	say LOGFILE "	entry2 id:", $entry2->getAttribute('id');
+	say LOGFILE "pair:", $mbr;
+
+	my ($gloss1) = $entry1->findnodes('./sense/gloss/text/text()');
+	say LOGFILE "	entry1:", $valen1, " id:", $entry1->getAttribute('id');
+	say LOGFILE "		gloss:$gloss1";
+	
+	my ($gloss2) = $entry2->findnodes('./sense/gloss/text/text()');
+	say LOGFILE "	entry2:", $valen2, "  id:", $entry2->getAttribute('id');
+	say LOGFILE "		gloss:$gloss2";
 
 	$mbrcnt++;
-	last if $mbrcnt > 3;
+	last if $mbrcnt > 30;
 	}
 say STDERR "Found $mbrcnt of $mbrtotal";
 # maybe do mbr deletes from Gnr here.
