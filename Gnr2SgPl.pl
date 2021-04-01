@@ -79,17 +79,17 @@ say STDERR $sgn  if $gnrdmp;
 
 my ($sgrelrt) = $fwdatatree->findnodes(q#//AUni[text()='# . $sgrelname . q#']/ancestor::rt[@class='LexRefType']#);
 my $sgabbrev = lc( ($sgrelrt->findnodes('./Abbreviation/AUni/text()'))[0]->serialize() );
-say LOGFILE "Singular Abbrev: $sgabbrev"  if $sgpldmp;
+say STDERR "Singular Abbrev: $sgabbrev"  if $sgpldmp;
 my $ssg = $sgrelrt->serialize();
-say LOGFILE "Singular LexReftype:"  if $sgpldmp;
-say LOGFILE $ssg  if $sgpldmp;
+say STDERR "Singular LexReftype:"  if $sgpldmp;
+say STDERR $ssg  if $sgpldmp;
 
 my ($plrelrt) = $fwdatatree->findnodes(q#//AUni[text()='# . $plrelname . q#']/ancestor::rt[@class='LexRefType']#);
 my $plabbrev = lc( ($plrelrt->findnodes('./Abbreviation/AUni/text()'))[0]->serialize() );
-say LOGFILE "Plural Abbrev: $plabbrev"  if $sgpldmp;
+say STDERR "Plural Abbrev: $plabbrev"  if $sgpldmp;
 my $spl = $plrelrt->serialize();
-say LOGFILE "Plural LexReftype:"  if $sgpldmp;
-say LOGFILE $spl  if $sgpldmp;
+say STDERR "Plural LexReftype:"  if $sgpldmp;
+say STDERR $spl  if $sgpldmp;
 
 say STDERR "Loading LIFT file: $liftfilename";
 my $lifttree = XML::LibXML->load_xml(location => $liftfilename);
