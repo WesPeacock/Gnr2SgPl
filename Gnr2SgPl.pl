@@ -78,14 +78,14 @@ my $sgn = $genrelrt->serialize();
 say STDERR $sgn  if $gnrdmp;
 
 my ($sgrelrt) = $fwdatatree->findnodes(q#//AUni[text()='# . $sgrelname . q#']/ancestor::rt[@class='LexRefType']#);
-my $sgabbrev = lc( ($sgrelrt->findnodes('./Abbreviation/AUni/text()'))[0]->serialize() );
+my $sgabbrev = uc( ($sgrelrt->findnodes('./Abbreviation/AUni/text()'))[0]->serialize() );
 say STDERR "Singular Abbrev: $sgabbrev"  if $sgpldmp;
 my $ssg = $sgrelrt->serialize();
 say STDERR "Singular LexReftype:"  if $sgpldmp;
 say STDERR $ssg  if $sgpldmp;
 
 my ($plrelrt) = $fwdatatree->findnodes(q#//AUni[text()='# . $plrelname . q#']/ancestor::rt[@class='LexRefType']#);
-my $plabbrev = lc( ($plrelrt->findnodes('./Abbreviation/AUni/text()'))[0]->serialize() );
+my $plabbrev = uc( ($plrelrt->findnodes('./Abbreviation/AUni/text()'))[0]->serialize() );
 say STDERR "Plural Abbrev: $plabbrev"  if $sgpldmp;
 my $spl = $plrelrt->serialize();
 say STDERR "Plural LexReftype:"  if $sgpldmp;
@@ -103,10 +103,10 @@ foreach my $entry ($lifttree->findnodes(q#//entry#)) {
 			say $entry->findnodes(q#./relation[@type='# . $sgrelname . q#']#);
 =pod
 			my ($s) = $entry->findnodes(q#./field[@type='Valency']/form/text/text()#);
-			say "lift:", lc $s;
+			say "lift:", uc $s;
 			my $temprt =  $rthash{$entry->getAttribute('guid')};
 			($s) = $temprt->findnodes(q#./Custom[@name='Valency']/AStr/Run/text()#);
-			say "fwdata:", lc $s;
+			say "fwdata:", uc $s;
 =cut
 			}
 		if ($entry->findnodes(q#./relation[@type='# . $plrelname . q#']#)) {
@@ -142,12 +142,12 @@ foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
 	my @rels1 = $entry1->findnodes(q#./relation[@type='# . $genrelname . q#']#);
 	next if (scalar @rels1) != 1;
 	my ($valen1) = $entry1->findnodes(q#./field[@type='Valency']/form/text/text()#);
-	$valen1 = lc $valen1;
+	$valen1 = uc $valen1;
 
 	my @rels2 = $entry2->findnodes(q#./relation[@type='# . $genrelname . q#']#);
 	next if (scalar @rels2) != 1;
 	my ($valen2) = $entry2->findnodes(q#./field[@type='Valency']/form/text/text()#);
-	$valen2 = lc $valen2;
+	$valen2 = uc $valen2;
 
 	#	and if one is Singular and other is Plural
 	next if ! (("$valen1$valen2" eq "$sgabbrev$plabbrev"))
