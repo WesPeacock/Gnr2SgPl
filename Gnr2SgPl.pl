@@ -61,6 +61,26 @@ I'm quitting" if -f $lockfile ;
 
 open(LOGFILE, '>:encoding(UTF-8)', "$logfilename");
 
+=pod
+# Log file looks like:
+# <?xml version="1.0" encoding="UTF-8" ?>
+# <pairs>
+# <pair guid="00fe7802-9317-4bf1-86a2-4bc7e300a85a" entry1id=
+# 		"SG_kób_263aa645-97e9-45ac-9a1d-37daabfe64ef" entry1gloss=
+# 		"special matte; handle for men's /daate/ calabash" entry2id=
+#
+# 		"PL_kobano_092c3252-68ed-471c-b394-90fa4f02e6dc" entry2gloss=
+# 		"special mattes"/>
+
+# Note that
+#      All the fields are empty, all the pertinent data is in the attributes
+#      guid of the Gnr cross reference
+#      entry{1,2}id attribute is separated by underscores:
+#          <valency>_lexeme_lexref-guid
+#      entry{1,2}gloss is English gloss
+
+=cut
+
 die "config:". Dumper($config) if $checkini;
 
 say STDERR "Loading fwdata file: $infilename";
@@ -115,6 +135,11 @@ foreach my $entry ($lifttree->findnodes(q#//entry#)) {
 		}
 	}
 
+# header of log file
+say LOGFILE '<?xml version="1.0" encoding="UTF-8" ?>';
+say LOGFILE '<pairs>';
+say LOGFILE q#<!--  DON'T EDIT ANYTHING ABOVE THIS LINE -->#, "\n\n" ;
+
 my $mbrcnt=0;
 my $mbrtotal=0;
 foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
@@ -152,7 +177,7 @@ foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
 	#	and if one is Singular and other is Plural
 	next if ! (("$valen1$valen2" eq "$sgabbrev$plabbrev"))
 		|| (("$valen1$valen2" eq "$plabbrev$sgabbrev"));
-		
+
 	# as a subroutine input mbr node
 	# Delete the Mbr node in the General list
 	#    -but don't mess up the foreach command
@@ -163,19 +188,24 @@ foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
 	# Log the change as an Update
 	# next
 
-	say LOGFILE "pair:", $mbr;
-
+	print LOGFILE q#<pair guid="#, $mbr->getAttribute('guid');
 	my ($gloss1) = $entry1->findnodes('./sense/gloss/text/text()');
-	say LOGFILE "	entry1:", $valen1, " id:", $entry1->getAttribute('id');
-	say LOGFILE "		gloss:$gloss1";
-	
+	say LOGFILE q#" entry1id=#;
+	say LOGFILE qq#	"$valen1\_#, $entry1->getAttribute('id'), q#" entry1gloss=#;
+	say LOGFILE qq#	"$gloss1" entry2id=\n#;
+
 	my ($gloss2) = $entry2->findnodes('./sense/gloss/text/text()');
-	say LOGFILE "	entry2:", $valen2, "  id:", $entry2->getAttribute('id');
-	say LOGFILE "		gloss:$gloss2";
+	say LOGFILE qq#	"$valen2\_#, $entry2->getAttribute('id'), q#" entry2gloss=#;
+	say LOGFILE qq#	"$gloss2"/>\n#;
 
 	$mbrcnt++;
 	last if $mbrcnt > 30;
 	}
+
+# footer of log
+say LOGFILE q#<!--  DON'T EDIT ANYTHING BELOW THIS LINE -->#;
+say LOGFILE '</pairs>';
+
 say STDERR "Found $mbrcnt of $mbrtotal";
 # maybe do mbr deletes from Gnr here.
 die;
