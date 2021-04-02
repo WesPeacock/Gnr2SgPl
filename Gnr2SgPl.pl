@@ -33,6 +33,7 @@ use Config::Tiny;
  # ; Gnr2SgPl.ini file looks like:
  # [Gnr2SgPl]
  # FwdataIn=FwProject-before.fwdata
+ # #FwdataOut is used by FixSgPl.pl
  # FwdataOut=FwProject.fwdata
  # SgPlFieldname=Valency
  # PluralRelationName=Plural
@@ -44,7 +45,6 @@ my $config = Config::Tiny->read($configfile, 'crlf');
 
 die "Couldn't find the INI file:$configfile\nQuitting" if !$config;
 my $infilename = $config->{$inisection}->{FwdataIn};
-my $outfilename = $config->{$inisection}->{FwdataOut};
 my $liftfilename = $config->{$inisection}->{LiftFile};
 my $logfilename = $config->{$inisection}->{LogFile};
 my $sgplfieldname = $config->{$inisection}->{SgPlFieldname};
@@ -179,16 +179,6 @@ foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
 		|| ("$valen1$valen2" eq "$plabbrev$sgabbrev");
 
 
-	# as a subroutine input mbr node
-	# Delete the Mbr node in the General list
-	#    -but don't mess up the foreach command
-	#    -maybe add to a list of mbrs to be deleted
-	# create a new rt as singular ref
-	# change the old Gnr ref to plural
-	# add the singular & plural rts to their respective mbr lists.
-	# Log the change as an Update
-	# next
-
 	print LOGFILE q#<pair guid="#, $mbr->getAttribute('guid');
 	my ($gloss1) = $entry1->findnodes('./sense/gloss/text/text()');
 	say LOGFILE q#" entry1id=#;
@@ -208,19 +198,6 @@ say LOGFILE q#<!--  DON'T EDIT ANYTHING BELOW THIS LINE -->#;
 say LOGFILE '</pairs>';
 
 say STDERR "Found $mbrcnt of $mbrtotal";
-# maybe do mbr deletes from Gnr here.
-die;
-die "entries:". Dumper(%entryhash) ;
-
-my $xmlstring = $fwdatatree->toString;
-# Some miscellaneous Tidying differences
-$xmlstring =~ s#><#>\n<#g;
-$xmlstring =~ s#(<Run.*?)/\>#$1\>\</Run\>#g;
-$xmlstring =~ s#/># />#g;
-say "";
-say "Finished processing, writing modified  $outfilename" ;
-open my $out_fh, '>:raw', $outfilename;
-print {$out_fh} $xmlstring;
 
 # Subroutines
 sub rtheader { # dump the <rt> part of the record
