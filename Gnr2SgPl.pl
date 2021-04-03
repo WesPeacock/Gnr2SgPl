@@ -182,18 +182,20 @@ foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
 		next if (scalar @rels) != 1;
 		}
 
-	print LOGFILE q#<pair guid="#, $mbr->getAttribute('guid');
+	say LOGFILE q#<pair guid="#, $mbr->getAttribute('guid'), q#" entry1id=#;
+
 	my ($gloss1) = $entry1->findnodes('./sense/gloss/text/text()');
-	say LOGFILE q#" entry1id=#;
+	$gloss1 = "Note: No gloss for " . $entry1->getAttribute('id') if (! $gloss1);
 	say LOGFILE qq#	"$valen1\_#, $entry1->getAttribute('id'), q#" entry1gloss=#;
-	say LOGFILE qq#	"$gloss1" entry2id=\n#;
+	say LOGFILE qq#	"$gloss1"#, " entry2id=\n";
 
 	my ($gloss2) = $entry2->findnodes('./sense/gloss/text/text()');
+	$gloss2 = "Note: No gloss for " . $entry2->getAttribute('id') if (! $gloss2);
 	say LOGFILE qq#	"$valen2\_#, $entry2->getAttribute('id'), q#" entry2gloss=#;
 	say LOGFILE qq#	"$gloss2"/>\n#;
 
 	$mbrcnt++;
-	last if $mbrcnt > 30;
+	last if ($mbrcnt > 30) && $debug;
 	}
 
 # footer of log
