@@ -1,8 +1,9 @@
 #!/usr/bin/perl
 # You should probably use the related bash script to call this script, but you can use: 
-my $USAGE = "Usage: $0 [--configfile Gnr2SgPl.ini] [--section Gnr2SgPl] [--debug] [--checkini] [--gnrdmp] [--sgpldmp]";
+my $USAGE = "Usage: $0 [--configfile Gnr2SgPl.ini] [--section Gnr2SgPl] [--debug] [--checkini] [--simple] [--gnrdmp] [--sgpldmp]";
 # debug -- dump debugging information
 # checkini -- quit after proscessing configfile
+# simple -- each member of the selected pair has no other Gnr relation other than the SG/PL one
 # gnrdmp -- dump master General Relation
 # sgpldmp -- dump master Singular/Plural Relation
 
@@ -27,6 +28,7 @@ GetOptions (
 	'gnrdmp'       => \(my $gnrdmp = 0),
 	'sgpldmp'       => \(my $sgpldmp = 0),
 	'checkini'       => \(my $checkini = 0),
+	'simple'       => \(my $simple = 0),
 	) or die $USAGE;
 
 use Config::Tiny;
@@ -163,14 +165,8 @@ foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
 	next if $entry2->findnodes(q#./relation[@type='# . $sgrelname . q#']#);
 	next if $entry2->findnodes(q#./relation[@type='# . $plrelname . q#']#);
 
-# next if both don't have a just single Gnr relation
-	my @rels1 = $entry1->findnodes(q#./relation[@type='# . $genrelname . q#']#);
-	next if (scalar @rels1) != 1;
 	my ($valen1) = $entry1->findnodes(q#./field[@type='Valency']/form/text/text()#);
 	$valen1 = uc $valen1;
-
-	my @rels2 = $entry2->findnodes(q#./relation[@type='# . $genrelname . q#']#);
-	next if (scalar @rels2) != 1;
 	my ($valen2) = $entry2->findnodes(q#./field[@type='Valency']/form/text/text()#);
 	$valen2 = uc $valen2;
 
@@ -178,6 +174,13 @@ foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
 	next unless ("$valen1$valen2" eq "$sgabbrev$plabbrev")
 		|| ("$valen1$valen2" eq "$plabbrev$sgabbrev");
 
+# In simple mode next if either don't have just a single Gnr relation
+	if ($simple) {
+		my @rels = $entry1->findnodes(q#./relation[@type='# . $genrelname . q#']#);
+		next if (scalar @rels) != 1;
+		@rels = $entry2->findnodes(q#./relation[@type='# . $genrelname . q#']#);
+		next if (scalar @rels) != 1;
+		}
 
 	print LOGFILE q#<pair guid="#, $mbr->getAttribute('guid');
 	my ($gloss1) = $entry1->findnodes('./sense/gloss/text/text()');
