@@ -14,12 +14,9 @@ use utf8;
 use open qw/:std :utf8/;
 use XML::LibXML;
 
-use File::Basename;
-my $scriptname = fileparse($0, qr/\.[^.]*/); # script name without the .pl
-
 use Getopt::Long;
 GetOptions (
-	'configfile:s'   => \(my $configfile = "$scriptname.ini"), # ini filename
+	'configfile:s'   => \(my $configfile = "Gnr2SgPl.ini"), # ini filename
 	'section:s'   => \(my $inisection = "Gnr2SgPl"), # section of ini file to use
 	'debug'       => \(my $debug = 0),
 	'gnrdmp'       => \(my $gnrdmp = 0),
