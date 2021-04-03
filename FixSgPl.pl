@@ -105,7 +105,10 @@ my $spl = $plrelrt->serialize();
 say STDERR "Plural LexReftype:"  if $sgpldmp;
 say STDERR $spl  if $sgpldmp;
 
+my $paircnt=0;
+my $pairtotal=0;
 foreach my $pair ($logtree->findnodes(q#//pair#)) {
+	$pairtotal++;
 	my $pairguid = $pair->getAttribute('guid');
 	my ($valen1, $lex1, $guid1) = split('_', $pair->getAttribute('entry1id'));
 	my ($valen2, $lex2, $guid2) = split('_', $pair->getAttribute('entry2id'));
@@ -113,7 +116,10 @@ foreach my $pair ($logtree->findnodes(q#//pair#)) {
 	say "val2:$valen2\tlex:$lex2\tguid2:$guid2" if $debug;
 	say $rthash{$pairguid} if $debug;
 
+	$paircnt++;
 	}
+
+say STDERR "Found $paircnt of $pairtotal";
 
 	# as a subroutine input mbr node
 	# Delete the Mbr node in the General list
