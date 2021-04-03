@@ -5,6 +5,11 @@ This repo contains scripts to convert Cross References from General Entry Level 
 
 The Daasanach import process (mistakenly) imported Singular/Plural cross references as "General" Entry/Sense Pairs (type 11). They should be pairs of Unidirectional cross references (type 16) where the "Plural" points from the singular to the plural and the "Singular" cross reference is from the plural to singular.
 
+***
+Explanation of the two part process where *GnrSgPl.pl* makes an intermediate XML log file that gets edited.
+
+*FixSgPl.pl* reads the log file and corrects the database.
+
 #### About this Document
 
 This document is written in Markdown format. It's hosted on *github.com*. The github site that it's hosted on will display it in a formatted version.
@@ -34,15 +39,17 @@ Instructions for how to download files from *github* are available from SIL Dict
 ***
 This section needs Corrections:
 
-- filenames converted.
-- documentation of *LIFT* file creation and moving to the working directory.
-  - documentation of getting the Number field name from the *LIFT* file.
+ - Still has some *NumbeExamples* detritus
+ - documentation of *LIFT* file creation and moving to the working directory.
+ - documentation of getting the Number field name (Valency) from the *LIFT* file.
+ - documentation of command line options
 
 Download the following following scripts and files from this repository on *github*:
 
-* **NumberExamples.ini**
-* **NumberExamples.pl**
-* **NumberExamples.sh**
+* **GnrSgPl.ini**
+* **GnrSgPl.pl**
+* **GnrSgPl.sh**
+* **FixSgPl.pl**
 * **README.md**
 
 Move the downloaded files into the working directory.
