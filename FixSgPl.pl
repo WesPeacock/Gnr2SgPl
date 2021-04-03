@@ -116,21 +116,19 @@ foreach my $pair ($logtree->findnodes(q#//pair#)) {
 	say "val2:$valen2\tlex:$lex2\tguid2:$guid2" if $debug;
 	say $rthash{$pairguid} if $debug;
 
-	$paircnt++;
-	last if ($paircnt > 5);
-	}
-
-say STDERR "Found $paircnt of $pairtotal";
-
-	# as a subroutine input mbr node
-	# Delete the Mbr node in the General list
-	#    -but don't mess up the foreach command
-	#    -maybe add to a list of mbrs to be deleted
+	# as a subroutine input pair node
+	# Delete the pair node in the General list
 	# create a new rt as singular ref
 	# change the old Gnr ref to plural
 	# add the singular & plural rts to their respective mbr lists.
 	# Log the change as an Update
 	# next
+
+	$paircnt++;
+	last if ($paircnt > 5);
+	}
+
+say STDERR "Found $paircnt of $pairtotal";
 die;
 my $xmlstring = $fwdatatree->toString;
 # Some miscellaneous Tidying differences
