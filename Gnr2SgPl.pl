@@ -174,9 +174,10 @@ foreach my $mbr ($genrelrt->findnodes('./Members/objsur')) {
 	my ($valen2) = $entry2->findnodes(q#./field[@type='Valency']/form/text/text()#);
 	$valen2 = uc $valen2;
 
-	#	and if one is Singular and other is Plural
-	next if ! (("$valen1$valen2" eq "$sgabbrev$plabbrev"))
-		|| (("$valen1$valen2" eq "$plabbrev$sgabbrev"));
+	#	next unless one is Singular and other is Plural
+	next unless ("$valen1$valen2" eq "$sgabbrev$plabbrev")
+		|| ("$valen1$valen2" eq "$plabbrev$sgabbrev");
+
 
 	# as a subroutine input mbr node
 	# Delete the Mbr node in the General list
