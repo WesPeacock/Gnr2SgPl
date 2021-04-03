@@ -107,6 +107,12 @@ say STDERR $spl  if $sgpldmp;
 
 foreach my $pair ($logtree->findnodes(q#//pair#)) {
 	my $pairguid = $pair->getAttribute('guid');
+	my ($valen1, $lex1, $guid1) = split('_', $pair->getAttribute('entry1id'));
+	my ($valen2, $lex2, $guid2) = split('_', $pair->getAttribute('entry2id'));
+	say "val1:$valen1\tlex:$lex1\tguid1:$guid1" if $debug;
+	say "val2:$valen2\tlex:$lex2\tguid2:$guid2" if $debug;
+	say $rthash{$pairguid} if $debug;
+
 	}
 
 	# as a subroutine input mbr node
