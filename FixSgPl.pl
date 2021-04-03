@@ -117,6 +117,7 @@ foreach my $pair ($logtree->findnodes(q#//pair#)) {
 	say $rthash{$pairguid} if $debug;
 
 	$paircnt++;
+	last if ($paircnt > 5);
 	}
 
 say STDERR "Found $paircnt of $pairtotal";
