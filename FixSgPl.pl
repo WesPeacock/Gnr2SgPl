@@ -137,6 +137,16 @@ foreach my $pair ($logtree->findnodes(q#//pair#)) {
 	$objsurnodes[0]->setAttribute('guid', $pl_guid);
 	$objsurnodes[1]->setAttribute('guid', $sg_guid);
 
+	# Clone the sgnode and put the clone right after the sgnode assign its new guid and ownerguid, ie PL
+	my $plnode = $sgnode->cloneNode(1);
+	$sgnode->parentNode->insertAfter($plnode,$sgnode);
+	$plnode->setAttribute('guid', $newrefguid);
+	$rthash{$newrefguid} = $plnode;
+	$plnode->setAttribute('ownerguid', $plrelrt->getAttribute('guid'));
+	@objsurnodes = $plnode->findnodes('./Targets/objsur');
+	$objsurnodes[0]->setAttribute('guid', $sg_guid);
+	$objsurnodes[1]->setAttribute('guid', $pl_guid);
+
 
 	$paircnt++;
 	last if ($paircnt > 5);
