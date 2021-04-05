@@ -119,6 +119,11 @@ foreach my $pair ($logtree->findnodes(q#//pair#)) {
 		$sg_guid = $guid2;
 		}
 
+	my ($sgrefpointer) = $genrelrt->findnodes(q#./Members/objsur[@guid="# . $pairguid . q#"]#);
+	# Find the SG reftype members and move the old gnr pointer into it.
+	my ($members) = $sgrelrt->findnodes(q#./Members#);
+	$members->addChild($sgrefpointer);
+
 	my $newrefguid = lc Data::GUID->new->as_string;
 
 	$paircnt++;
