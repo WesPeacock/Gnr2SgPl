@@ -124,7 +124,13 @@ foreach my $pair ($logtree->findnodes(q#//pair#)) {
 	my ($members) = $sgrelrt->findnodes(q#./Members#);
 	$members->addChild($sgrefpointer);
 
+# Clone the pointer and assign a new guid to it and put it into the PL reftype members
+	my $plrefpointer = $sgrefpointer->cloneNode(1);
 	my $newrefguid = lc Data::GUID->new->as_string;
+	$plrefpointer->setAttribute('guid', $newrefguid);
+	($members) = $plrelrt->findnodes(q#./Members#);
+	$members->addChild($plrefpointer);
+
 
 	$paircnt++;
 	last if ($paircnt > 5);
