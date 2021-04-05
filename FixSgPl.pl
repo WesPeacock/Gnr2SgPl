@@ -120,17 +120,6 @@ foreach my $pair ($logtree->findnodes(q#//pair#)) {
 		}
 
 	my $newrefguid = lc Data::GUID->new->as_string;
-	say "val1:$valen1\tlex:$lex1\tguid1:$guid1" if $debug;
-	say "val2:$valen2\tlex:$lex2\tguid2:$guid2" if $debug;
-	say $rthash{$pairguid} if $debug;
-
-	# as a subroutine input pair node
-	# Delete the pair node in the General list
-	# create a new rt as singular ref
-	# change the old Gnr ref to plural
-	# add the singular & plural rts to their respective mbr lists.
-	# Log the change as an Update
-	# next
 
 	$paircnt++;
 	last if ($paircnt > 5);
