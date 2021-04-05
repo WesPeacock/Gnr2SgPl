@@ -131,6 +131,12 @@ foreach my $pair ($logtree->findnodes(q#//pair#)) {
 	($members) = $plrelrt->findnodes(q#./Members#);
 	$members->addChild($plrefpointer);
 
+	my $sgnode = $rthash{$pairguid};
+	$sgnode->setAttribute('ownerguid', $sgrelrt->getAttribute('guid'));
+	my @objsurnodes = $sgnode->findnodes('./Targets/objsur');
+	$objsurnodes[0]->setAttribute('guid', $pl_guid);
+	$objsurnodes[1]->setAttribute('guid', $sg_guid);
+
 
 	$paircnt++;
 	last if ($paircnt > 5);
