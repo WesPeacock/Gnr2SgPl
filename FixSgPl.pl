@@ -153,7 +153,6 @@ foreach my $pair ($logtree->findnodes(q#//pair#)) {
 	}
 
 say STDERR "Found $paircnt of $pairtotal";
-die;
 my $xmlstring = $fwdatatree->toString;
 # Some miscellaneous Tidying differences
 $xmlstring =~ s#><#>\n<#g;
