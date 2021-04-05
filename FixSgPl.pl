@@ -145,35 +145,3 @@ sub rtheader { # dump the <rt> part of the record
 my ($node) = @_;
 return  ( split /\n/, $node )[0];
 }
-
-sub traverseuptoclass {
-	# starting at $rt
-	#    go up the ownerguid links until you reach an
-	#         rt @class == $rtclass
-	#    or
-	#         no more ownerguid links
-	# return the rt you found.
-my ($rt, $rtclass) = @_;
-	while ($rt->getAttribute('class') ne $rtclass) {
-#		say ' At ', rtheader($rt);
-		if ( !$rt->hasAttribute('ownerguid') ) {last} ;
-		# find node whose @guid = $rt's @ownerguid
-		$rt = $rthash{$rt->getAttribute('ownerguid')};
-	}
-#	say 'Found ', rtheader($rt);
-	return $rt;
-}
-
-sub displaylexentstring {
-my ($lexentrt) = @_;
-
-my ($formguid) = $lexentrt->findvalue('./LexemeForm/objsur/@guid');
-my $formrt =  $rthash{$formguid};
-my ($formstring) =($rthash{$formguid}->findnodes('./Form/AUni/text()'))[0]->toString;
-# If there's more than one encoding, you only get the first
-
-my ($homographno) = $lexentrt->findvalue('./HomographNumber/@val');
-
-my $guid = $lexentrt->getAttribute('guid');
-return qq#$formstring # . ($homographno ? qq#hm:$homographno #  : "") . qq#(guid="$guid")#;
-}
