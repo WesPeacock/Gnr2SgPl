@@ -122,6 +122,11 @@ foreach my $pair ($logtree->findnodes(q#//pair#)) {
 	my ($sgrefpointer) = $genrelrt->findnodes(q#./Members/objsur[@guid="# . $pairguid . q#"]#);
 	# Find the SG reftype members and move the old gnr pointer into it.
 	my ($members) = $sgrelrt->findnodes(q#./Members#);
+	if (! $members) {
+		$members = XML::LibXML::Element->new("Members");
+		my ($maptype) = $sgrelrt->findnodes(q#./MappingType#);
+		$sgrelrt->insertAfter($members, $maptype);
+	}
 	$members->addChild($sgrefpointer);
 
 # Clone the pointer and assign a new guid to it and put it into the PL reftype members
@@ -129,6 +134,11 @@ foreach my $pair ($logtree->findnodes(q#//pair#)) {
 	my $newrefguid = lc Data::GUID->new->as_string;
 	$plrefpointer->setAttribute('guid', $newrefguid);
 	($members) = $plrelrt->findnodes(q#./Members#);
+	if (! $members) {
+		$members = XML::LibXML::Element->new("Members");
+		my ($maptype) = $plrelrt->findnodes(q#./MappingType#);
+		$plrelrt->insertAfter($members, $maptype);
+	}
 	$members->addChild($plrefpointer);
 
 	my $sgnode = $rthash{$pairguid};
