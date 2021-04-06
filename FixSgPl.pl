@@ -159,7 +159,7 @@ foreach my $pair ($logtree->findnodes(q#//pair#)) {
 
 
 	$paircnt++;
-	last if ($paircnt > 5);
+	last if ($paircnt > 5) && $debug;
 	}
 
 say STDERR "Found $paircnt of $pairtotal";
