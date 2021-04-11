@@ -37,7 +37,7 @@ use Config::Tiny;
  # FwdataIn=FwProject-before.fwdata
  # #FwdataOut is used by FixSgPl.pl
  # FwdataOut=FwProject.fwdata
- # SgPlFieldname=Valency
+ # SgPlFieldName=Valency
  # PluralRelationName=Plural
  # SingularRelationName=Singular
  # LiftFile=lift.lift
@@ -49,7 +49,7 @@ die "Couldn't find the INI file:$configfile\nQuitting" if !$config;
 my $infilename = $config->{$inisection}->{FwdataIn};
 my $liftfilename = $config->{$inisection}->{LiftFile};
 my $logfilename = $config->{$inisection}->{LogFile};
-my $sgplfieldname = $config->{$inisection}->{SgPlFieldname};
+my $sgplfieldname = $config->{$inisection}->{SgPlFieldName};
 my $plrelname = $config->{$inisection}->{PluralRelationName};
 my $sgrelname = $config->{$inisection}->{SingularRelationName};
 my $genrelname = $config->{$inisection}->{GeneralRelationName};
