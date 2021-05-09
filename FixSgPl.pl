@@ -2,7 +2,7 @@
 # You should probably use the related bash script to call this script, but you can use:
 my $USAGE = "Usage: $0 [--configfile Gnr2SgPl.ini] [--section Gnr2SgPl] [--debug] [--checkini] [--gnrdmp] [--sgpldmp]";
 # debug -- dump debugging information
-# checkini -- quit after proscessing configfile
+# checkini -- quit after processing configfile
 
 use 5.016;
 use strict;
@@ -110,6 +110,7 @@ my $pairtotal=0;
 foreach my $pair ($logtree->findnodes(q#//pair#)) {
 	$pairtotal++;
 	my $pairguid = $pair->getAttribute('guid');
+	say STDERR $pairguid;
 	my ($valen1, $lex1, $guid1) = split('_', $pair->getAttribute('entry1id'));
 	my ($valen2, $lex2, $guid2) = split('_', $pair->getAttribute('entry2id'));
 	my $sg_guid = $guid1;

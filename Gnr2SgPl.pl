@@ -2,7 +2,7 @@
 # You should probably use the related bash script to call this script, but you can use: 
 my $USAGE = "Usage: $0 [--configfile Gnr2SgPl.ini] [--section Gnr2SgPl] [--debug] [--checkini] [--simple] [--gnrdmp] [--sgpldmp]";
 # debug -- dump debugging information
-# checkini -- quit after proscessing configfile
+# checkini -- quit after processing configfile
 # simple -- each member of the selected pair has no other Gnr relation other than the SG/PL one
 # gnrdmp -- dump master General Relation
 # sgpldmp -- dump master Singular/Plural Relation
