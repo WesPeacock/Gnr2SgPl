@@ -48,12 +48,14 @@ Move the downloaded files into the working directory.
 
 Edit the **GnrSgPl.ini** file and choose values for the following lines:
 
-	PluralRelationName=Plural
-	SingularRelationName=Singular
-	GeneralRelationName=General
-	SgPlFieldName=Valency
-	LiftFile=lift.lift
-	LogFile=Gnr2SgPl.log
+```ini
+PluralRelationName=Plural
+SingularRelationName=Singular
+GeneralRelationName=General
+SgPlFieldName=Valency
+LiftFile=lift.lift
+LogFile=Gnr2SgPl.log
+```
 Names of the items are on the right hand side of the equals sign. Don't put any spaces before or after the name.
 
 Note that the names of the fields in FLEx are not necessarily what is displayed by FLEx. When a field is created and later renamed, it maintains its original name. The new name is stored in an attribute called the *label*. For example, the Daasanach field currently named **Number** was created as **Valency**. Here's how that information is stored in the FWdata file:
