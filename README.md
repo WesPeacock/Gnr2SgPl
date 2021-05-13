@@ -60,7 +60,9 @@ Names of the items are on the right hand side of the equals sign. Don't put any 
 
 Note that the names of the fields in FLEx are not necessarily what is displayed by FLEx. When a field is created and later renamed, it maintains its original name. The new name is stored in an attribute called the *label*. For example, the Daasanach field currently named **Number** was created as **Valency**. Here's how that information is stored in the FWdata file:
 
-	<CustomField class="LexEntry" helpString="This field gives the entry number i.e. sg/pl" label="Number" name="Valency" type="String" wsSelector="-1" />
+```xml
+<CustomField class="LexEntry" helpString="This field gives the entry number i.e. sg/pl" label="Number" name="Valency" type="String" wsSelector="-1" />
+```
 
 The original name is used in the LIFT file as well and can be retrieved from it.
 
